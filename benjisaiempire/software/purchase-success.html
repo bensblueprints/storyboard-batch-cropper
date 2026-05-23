@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Purchase complete — Benji's AI Empire</title>
+    <link rel="stylesheet" href="/software/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a href="/" class="brand">Benji's AI Empire</a>
+        <nav>
+          <a href="/software/">Software</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap product-page">
+      <h1>Purchase complete</h1>
+      <p id="purchase-message" class="hint">Confirming your payment and generating your license key…</p>
+
+      <div id="license-box" class="purchase-card hidden">
+        <h2>Your license key</h2>
+        <p>Copy this into Storyboard Batch Cropper when the app asks you to activate:</p>
+        <code id="license-key" class="license-key"></code>
+        <button type="button" id="copy-key-btn" class="btn btn-secondary">Copy license key</button>
+        <p class="hint">We also recommend saving this key somewhere safe.</p>
+      </div>
+
+      <p id="purchase-error" class="status error hidden"></p>
+    </main>
+
+    <script>
+      const API = `${window.location.origin}/api/v1`;
+      const params = new URLSearchParams(window.location.search);
+      const orderId = params.get('order') || sessionStorage.getItem('pendingOrderId');
+      const isMock = params.get('mock') === '1';
+
+      const messageEl = document.getElementById('purchase-message');
+      const licenseBox = document.getElementById('license-box');
+      const licenseKeyEl = document.getElementById('license-key');
+      const errorEl = document.getElementById('purchase-error');
+
+      function showLicense(key) {
+        messageEl.textContent = 'Payment confirmed. Your license is ready.';
+        licenseKeyEl.textContent = key;
+        licenseBox.classList.remove('hidden');
+      }
+
+      function showError(message) {
+        errorEl.textContent = message;
+        errorEl.classList.remove('hidden');
+        messageEl.textContent = 'We could not confirm your payment yet.';
+      }
+
+      async function pollOrder(attempt = 0) {
+        if (!orderId) {
+          showError('Missing order ID. Return to the product page and try checkout again.');
+          return;
+        }
+
+        try {
+          const query = isMock ? '?mock=1' : '';
+          const response = await fetch(`${API}/checkout/orders/${encodeURIComponent(orderId)}${query}`);
+          const data = await response.json();
+
+          if (!response.ok) {
+            showError(data.message || 'Order not found');
+            return;
+          }
+
+          if (data.status === 'paid' && data.licenseKey) {
+            sessionStorage.removeItem('pendingOrderId');
+            showLicense(data.licenseKey);
+            return;
+          }
+
+          if (attempt >= 30) {
+            showError('Payment is still processing. Check your email or use “Look up license key” on the product page in a few minutes.');
+            return;
+          }
+
+          setTimeout(() => pollOrder(attempt + 1), 2000);
+        } catch {
+          showError('Could not reach the license server.');
+        }
+      }
+
+      document.getElementById('copy-key-btn').addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(licenseKeyEl.textContent);
+          messageEl.textContent = 'Copied to clipboard.';
+        } catch {
+          messageEl.textContent = 'Could not copy automatically. Select and copy the key manually.';
+        }
+      });
+
+      pollOrder();
+    </script>
+  </body>
+</html>

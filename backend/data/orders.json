@@ -1,0 +1,64 @@
+{
+  "orders": [
+    {
+      "id": "ord_e44b8629242ff76c",
+      "product": "storyboard-batch-cropper",
+      "status": "pending",
+      "amount": 9.99,
+      "currency": "USD",
+      "paymentLinkId": "pl_mock_ord_e44b8629242ff76c",
+      "checkoutUrl": "http://localhost:5173/software/purchase-success.html?order=ord_e44b8629242ff76c?order=ord_e44b8629242ff76c&mock=1",
+      "licenseKey": null,
+      "email": null,
+      "createdAt": "2026-05-23T22:27:31.467Z"
+    },
+    {
+      "id": "ord_35c7e71c0f42425d",
+      "product": "storyboard-batch-cropper",
+      "status": "pending",
+      "amount": 9.99,
+      "currency": "USD",
+      "paymentLinkId": "pl_mock_ord_35c7e71c0f42425d",
+      "checkoutUrl": "http://localhost:5173/software/purchase-success.html?order=ord_35c7e71c0f42425d?order=ord_35c7e71c0f42425d&mock=1",
+      "licenseKey": null,
+      "email": null,
+      "createdAt": "2026-05-23T22:27:40.986Z"
+    },
+    {
+      "id": "ord_f4066b1e522a30cd",
+      "product": "storyboard-batch-cropper",
+      "status": "pending",
+      "amount": 9.99,
+      "currency": "USD",
+      "paymentLinkId": "pl_mock_ord_f4066b1e522a30cd",
+      "checkoutUrl": "http://localhost:5173/software/purchase-success.html?order=ord_f4066b1e522a30cd?order=ord_f4066b1e522a30cd&mock=1",
+      "licenseKey": null,
+      "email": null,
+      "createdAt": "2026-05-23T22:28:03.929Z"
+    },
+    {
+      "id": "ord_a8e8e0289b22de5f",
+      "product": "storyboard-batch-cropper",
+      "status": "pending",
+      "amount": 9.99,
+      "currency": "USD",
+      "paymentLinkId": "pl_mock_ord_a8e8e0289b22de5f",
+      "checkoutUrl": "http://localhost:5173/software/purchase-success.html?order=ord_a8e8e0289b22de5f?order=ord_a8e8e0289b22de5f&mock=1",
+      "licenseKey": null,
+      "email": null,
+      "createdAt": "2026-05-23T22:28:29.988Z"
+    },
+    {
+      "id": "ord_6865647dfb8b30ce",
+      "product": "storyboard-batch-cropper",
+      "status": "pending",
+      "amount": 9.99,
+      "currency": "USD",
+      "paymentLinkId": "pl_mock_ord_6865647dfb8b30ce",
+      "checkoutUrl": "http://localhost:5173/software/purchase-success.html?order=ord_6865647dfb8b30ce&mock=1",
+      "licenseKey": null,
+      "email": null,
+      "createdAt": "2026-05-23T22:28:58.096Z"
+    }
+  ]
+}

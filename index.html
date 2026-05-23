@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Storyboard Batch Cropper</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <div>
+          <h1>Storyboard Batch Cropper</h1>
+          <p class="subtitle">
+            Short film workflow — section, crop, export, generate
+            · <a href="/software/" class="header-link">Get license</a>
+          </p>
+        </div>
+        <button type="button" id="export-btn" class="btn btn-primary" disabled>
+          Download package
+        </button>
+      </header>
+
+      <main class="layout">
+        <aside class="sidebar">
+          <section class="panel">
+            <h2>Workflow</h2>
+            <div class="btn-group phase-tabs">
+              <button type="button" id="phase-section-btn" class="btn btn-toggle active" data-phase="section">
+                1. Section
+              </button>
+              <button type="button" id="phase-crop-btn" class="btn btn-toggle" data-phase="crop" disabled>
+                2. Crop
+              </button>
+              <button type="button" id="phase-export-btn" class="btn btn-toggle" data-phase="export" disabled>
+                3. Export
+              </button>
+              <button type="button" id="phase-generate-btn" class="btn btn-toggle" data-phase="generate" disabled>
+                4. Generate
+              </button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2>Images</h2>
+            <div id="drop-zone" class="drop-zone" tabindex="0">
+              <p>Drop storyboard images here</p>
+              <p class="hint">or click to browse (PNG, JPG, WebP)</p>
+              <input id="file-input" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden />
+            </div>
+            <ul id="image-list" class="image-list"></ul>
+          </section>
+
+          <section id="section-controls" class="panel">
+            <h2>Layout</h2>
+            <div class="btn-group" id="panel-count-group">
+              <button type="button" class="btn btn-toggle active" data-panels="4">4</button>
+              <button type="button" class="btn btn-toggle" data-panels="6">6</button>
+              <button type="button" class="btn btn-toggle" data-panels="8">8</button>
+              <button type="button" class="btn btn-toggle" data-panels="12">12</button>
+            </div>
+            <div id="grid-options" class="grid-options"></div>
+          </section>
+
+          <section id="spacing-controls" class="panel">
+            <h2>Spacing</h2>
+            <div class="control">
+              <label for="margin-top">Top margin</label>
+              <input id="margin-top" type="range" min="0" max="200" value="0" />
+              <span id="margin-top-val">0</span>
+            </div>
+            <div class="control">
+              <label for="margin-bottom">Bottom margin</label>
+              <input id="margin-bottom" type="range" min="0" max="200" value="0" />
+              <span id="margin-bottom-val">0</span>
+            </div>
+            <div class="control">
+              <label for="margin-left">Left margin</label>
+              <input id="margin-left" type="range" min="0" max="200" value="0" />
+              <span id="margin-left-val">0</span>
+            </div>
+            <div class="control">
+              <label for="margin-right">Right margin</label>
+              <input id="margin-right" type="range" min="0" max="200" value="0" />
+              <span id="margin-right-val">0</span>
+            </div>
+            <div class="control">
+              <label for="gutter-x">Horizontal gutter</label>
+              <input id="gutter-x" type="range" min="0" max="100" value="0" />
+              <span id="gutter-x-val">0</span>
+            </div>
+            <div class="control">
+              <label for="gutter-y">Vertical gutter</label>
+              <input id="gutter-y" type="range" min="0" max="100" value="0" />
+              <span id="gutter-y-val">0</span>
+            </div>
+            <div class="actions">
+              <button type="button" id="reset-lines-btn" class="btn btn-secondary">Reset lines</button>
+              <button type="button" id="apply-all-btn" class="btn btn-secondary" disabled>
+                Apply to all
+              </button>
+            </div>
+          </section>
+
+          <section id="crop-controls" class="panel hidden">
+            <h2>Crop panel</h2>
+            <p class="hint">Pick a panel, then drag green edges on the preview.</p>
+            <div id="panel-picker" class="panel-picker"></div>
+            <div class="actions">
+              <button type="button" id="reset-panel-crop-btn" class="btn btn-secondary">
+                Reset panel
+              </button>
+              <button type="button" id="apply-crop-all-btn" class="btn btn-secondary">
+                Apply to all
+              </button>
+            </div>
+          </section>
+
+          <section id="export-controls" class="panel hidden">
+            <h2>Export package</h2>
+            <div class="control control-text">
+              <label for="project-title">Project title</label>
+              <input id="project-title" type="text" placeholder="Untitled Short Film" />
+            </div>
+            <p id="export-summary" class="hint">Prepare export to review scenes.</p>
+            <div class="actions actions-stack">
+              <button type="button" id="refresh-export-btn" class="btn btn-secondary">Refresh preview</button>
+              <button type="button" id="download-manifest-btn" class="btn btn-secondary" disabled>
+                Download manifest.json
+              </button>
+              <button type="button" id="copy-manifest-btn" class="btn btn-secondary" disabled>
+                Copy manifest
+              </button>
+            </div>
+          </section>
+
+          <section id="generate-controls" class="panel hidden">
+            <h2>Video generation</h2>
+            <p class="hint">Requires your FAL API key. You pay fal.ai directly for model usage.</p>
+            <div class="control control-text">
+              <label for="fal-api-key">FAL API key (required)</label>
+              <input id="fal-api-key" type="password" placeholder="Paste key:secret" autocomplete="off" />
+              <p class="hint">Get a key at <a href="https://fal.ai/dashboard/keys" target="_blank" rel="noopener noreferrer">fal.ai/dashboard/keys</a></p>
+            </div>
+            <div class="control">
+              <label for="fal-model-select">Image-to-video model</label>
+              <select id="fal-model-select" disabled>
+                <option value="">Enter FAL key to load models…</option>
+              </select>
+              <p id="fal-model-hint" class="hint">Loads all active fal.ai image-to-video models.</p>
+            </div>
+            <div class="control">
+              <label for="happy-horse-duration">Default clip duration (Auto scenes)</label>
+              <select id="happy-horse-duration">
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5" selected>5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+              <p class="hint">Used when a scene is set to Auto and has no attached audio.</p>
+            </div>
+            <p id="generation-cost-estimate" class="generation-cost-estimate hidden"></p>
+            <p id="generation-status" class="hint hidden"></p>
+            <div class="actions actions-stack">
+              <button type="button" id="start-happy-horse-btn" class="btn btn-primary" disabled>
+                Start generation
+              </button>
+              <button type="button" id="download-happy-horse-btn" class="btn btn-secondary" disabled>
+                Download video package
+              </button>
+            </div>
+          </section>
+        </aside>
+
+        <section class="workspace">
+          <div id="empty-state" class="empty-state">
+            <p>Add a storyboard image to begin</p>
+          </div>
+          <div id="preview-area" class="preview-area hidden">
+            <div class="preview-toolbar">
+              <span id="active-filename"></span>
+              <span id="active-dimensions"></span>
+              <span id="phase-label"></span>
+            </div>
+            <div id="canvas-wrap" class="canvas-wrap">
+              <canvas id="preview-canvas"></canvas>
+            </div>
+            <p id="preview-hint" class="hint">Drag any line — white edges or blue splits — to section panels</p>
+          </div>
+          <div id="thumbnails" class="thumbnails hidden">
+            <h2>Panel preview</h2>
+            <div id="thumbnail-grid" class="thumbnail-grid"></div>
+          </div>
+          <div id="export-review" class="export-review hidden">
+            <div id="export-loading" class="export-loading hidden">Building export preview…</div>
+            <div id="export-review-content"></div>
+          </div>
+          <div id="generation-review" class="generation-review hidden">
+            <div id="generation-loading" class="export-loading hidden">Running Happy Horse…</div>
+            <div id="generation-review-content"></div>
+            <div id="generation-results"></div>
+          </div>
+          <input id="extra-assets-input" type="file" accept="image/*,audio/*,.mp3,.wav,.m4a,.aac,.ogg" multiple hidden />
+          <input id="replace-scene-input" type="file" accept="image/png,image/jpeg,image/webp" hidden />
+          <input id="scene-reference-input" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden />
+        </section>
+      </main>
+
+      <div id="status" class="status hidden"></div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

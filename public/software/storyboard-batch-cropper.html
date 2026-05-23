@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Storyboard Batch Cropper — Benji's AI Empire</title>
+    <link rel="stylesheet" href="/software/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a href="/" class="brand">Benji's AI Empire</a>
+        <nav>
+          <a href="/software/">Software</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap product-page">
+      <a href="/software/" class="back-link">← All software</a>
+      <h1>Storyboard Batch Cropper</h1>
+      <p class="price">$9.99 one-time · Program members included</p>
+
+      <div class="product-layout">
+        <section>
+          <h2>What it does</h2>
+          <p>
+            Turn composite storyboard sheets into individual scene shots, review them in story order,
+            then generate image-to-video clips through fal.ai with per-scene prompts and reference images.
+          </p>
+          <ol>
+            <li>Section panels on your storyboard sheet</li>
+            <li>Crop each panel</li>
+            <li>Export scene package + manifest</li>
+            <li>Generate videos with your FAL API key</li>
+          </ol>
+
+          <h2>Requirements</h2>
+          <ul>
+            <li>License key from Benji's AI Empire</li>
+            <li>Your own <a href="https://fal.ai/dashboard/keys" target="_blank" rel="noopener noreferrer">fal.ai API key</a> for video generation</li>
+            <li>Modern desktop browser</li>
+          </ul>
+        </section>
+
+        <aside class="purchase-card">
+          <h2>Get your license</h2>
+          <p>Program members receive a key by email. One-time buyers pay $9.99 through Airwallex and get a key right after checkout.</p>
+          <button type="button" id="purchase-btn" class="btn btn-primary">Buy for $9.99</button>
+          <p class="hint">Secure checkout powered by Airwallex.</p>
+
+          <hr />
+
+          <h3>Already purchased?</h3>
+          <label for="purchase-email">Email used at checkout</label>
+          <input id="purchase-email" type="email" placeholder="you@example.com" />
+          <button type="button" id="resend-btn" class="btn btn-secondary">Look up license key</button>
+          <p id="purchase-status" class="status hidden"></p>
+        </aside>
+      </div>
+    </main>
+
+    <script>
+      const API = `${window.location.origin}/api/v1`;
+      const statusEl = document.getElementById('purchase-status');
+      const purchaseBtn = document.getElementById('purchase-btn');
+
+      function showStatus(message, ok) {
+        statusEl.textContent = message;
+        statusEl.className = ok ? 'status success' : 'status error';
+      }
+
+      purchaseBtn.addEventListener('click', async () => {
+        purchaseBtn.disabled = true;
+        showStatus('Opening secure checkout…', true);
+
+        try {
+          const response = await fetch(`${API}/checkout/create`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product: 'storyboard-batch-cropper' }),
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            showStatus(data.message || 'Could not start checkout', false);
+            purchaseBtn.disabled = false;
+            return;
+          }
+          sessionStorage.setItem('pendingOrderId', data.orderId);
+          window.location.href = data.checkoutUrl;
+        } catch {
+          showStatus('Checkout server unavailable. Start the backend API and try again.', false);
+          purchaseBtn.disabled = false;
+        }
+      });
+
+      document.getElementById('resend-btn').addEventListener('click', async () => {
+        const email = document.getElementById('purchase-email').value.trim();
+        if (!email) {
+          showStatus('Enter your email first.', false);
+          return;
+        }
+        try {
+          const response = await fetch(`${API}/licenses/lookup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, product: 'storyboard-batch-cropper' }),
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            showStatus(data.message || 'No license found for that email yet', false);
+            return;
+          }
+          showStatus(`Your license key: ${data.key}`, true);
+        } catch {
+          showStatus('License server unavailable. Try again later.', false);
+        }
+      });
+    </script>
+  </body>
+</html>

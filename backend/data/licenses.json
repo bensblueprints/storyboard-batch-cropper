@@ -1,0 +1,12 @@
+{
+  "licenses": [
+    {
+      "key": "SB-DEV-LOCAL-2026",
+      "product": "storyboard-batch-cropper",
+      "type": "program",
+      "email": "dev@local.test",
+      "createdAt": "2026-05-24T00:00:00.000Z",
+      "revoked": false
+    }
+  ]
+}

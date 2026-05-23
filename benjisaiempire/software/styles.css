@@ -1,0 +1,147 @@
+:root {
+  color-scheme: dark;
+  --bg: #0b1020;
+  --panel: #151d33;
+  --text: #eef2ff;
+  --muted: #9aa7c7;
+  --accent: #7c5cff;
+  --border: #27304d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Segoe UI, sans-serif;
+  background: linear-gradient(180deg, #0b1020 0%, #11182b 100%);
+  color: var(--text);
+}
+
+.wrap {
+  width: min(1100px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: rgba(11, 16, 32, 0.9);
+}
+
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.brand {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+nav a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 1rem;
+}
+
+.hero,
+.product-grid,
+.product-page {
+  padding: 2rem 0 3rem;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.product-card,
+.purchase-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem;
+}
+
+.price {
+  color: #b7a6ff;
+  font-weight: 700;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #222b45;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.product-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.purchase-card input {
+  width: 100%;
+  margin: 0.5rem 0 1rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0f1528;
+  color: var(--text);
+}
+
+.status {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+}
+
+.status.success {
+  background: rgba(34, 197, 94, 0.15);
+}
+
+.status.error {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.hidden {
+  display: none;
+}
+
+.license-key {
+  display: block;
+  margin: 1rem 0;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: #0f1528;
+  border: 1px solid var(--border);
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+}
+
+.back-link {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+@media (max-width: 800px) {
+  .product-layout {
+    grid-template-columns: 1fr;
+  }
+}

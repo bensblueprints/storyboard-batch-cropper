@@ -1,0 +1,21 @@
+{
+  "name": "storyboard-batch-cropper",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:api": "npm start --prefix backend",
+    "dev:all": "concurrently -n app,api -c cyan,magenta \"npm run dev\" \"npm run dev:api\"",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fal-ai/client": "^1.10.1",
+    "jszip": "^3.10.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "vite": "^6.3.5"
+  }
+}
