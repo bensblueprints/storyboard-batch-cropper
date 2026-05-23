@@ -14,6 +14,17 @@ export function getLicenseApiUrl() {
   return 'https://benjisaiempire.com/api/v1';
 }
 
+/** @returns {string} */
+export function getStoryboardAppUrl() {
+  if (import.meta.env.VITE_STORYBOARD_APP_URL?.trim()) {
+    return import.meta.env.VITE_STORYBOARD_APP_URL.trim();
+  }
+  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+    return window.location.origin;
+  }
+  return 'https://storyboard.benjisaiempire.com';
+}
+
 /** @returns {boolean} */
 export function isLicenseBypassed() {
   return import.meta.env.VITE_LICENSE_BYPASS === 'true';
